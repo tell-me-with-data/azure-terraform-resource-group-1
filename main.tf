@@ -15,24 +15,9 @@ provider "azurerm" {
   }
 }
 
-resource "azurerm_resource_group" "resource_group_sales_dev" {
-  name     = "${var.general_resource_group_name}-sales-dev"
+resource "azurerm_resource_group" "resources_groups" {
+  for_each = var.deployments
+  name     = "${var.prefix}-${each.key}"
   location = "eastus2"
-  tags = {
-    env          = "dev"
-    department   = "sales"
-    subscription = "subscription-azure-default"
-    program      = "sales-analytics"
-  }
-}
-
-resource "azurerm_resource_group" "resource_group_sales_prod" {
-  name     = "${var.general_resource_group_name}-sales-prod"
-  location = "eastus2"
-  tags = {
-    env          = "prod"
-    department   = "sales"
-    subscription = "subscription-azure-default"
-    program      = "sales-analytics"
-  }
+  tags     = each.value.tags
 }
